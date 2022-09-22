@@ -7,6 +7,8 @@ import subprocess
 import argparse
 from influxdb import InfluxDBClient
 
+SECTOR_SIZE = 512
+
 logger = logging.getLogger("collector")
 
 def parse_data_line(label, values):
@@ -58,7 +60,9 @@ def parse_data_line(label, values):
                 'discard_op', 'discard_sect')
         for k, v in zip(keys, values):
             v = int(v)
-            data_row[f"dsk.{dsk_label}.{k}"] = v
+            data_row[f"dsk.{k}"] = v
+        data_row[f"dsk.read_bytes"] = data_row["dsk.read_sect"] * SECTOR_SIZE
+        data_row[f"dsk.write_bytes"] = data_row["dsk.write_sect"] * SECTOR_SIZE
 
     return data_row, tags
 

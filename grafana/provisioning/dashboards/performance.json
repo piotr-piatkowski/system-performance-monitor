@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -606,8 +606,8 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisLabel": "ops",
+            "axisPlacement": "left",
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -648,7 +648,28 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*_bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "bytes"
+              },
+              {
+                "id": "unit",
+                "value": "binBps"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -665,7 +686,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -685,6 +706,12 @@
             },
             {
               "params": [
+                "disk"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
                 "null"
               ],
               "type": "fill"
@@ -699,7 +726,7 @@
             [
               {
                 "params": [
-                  "dsk.nvme0n1.io_ms"
+                  "dsk.read_bytes"
                 ],
                 "type": "field"
               },
@@ -709,7 +736,7 @@
               },
               {
                 "params": [
-                  "io_ms"
+                  "read_bytes"
                 ],
                 "type": "alias"
               }
@@ -717,7 +744,7 @@
             [
               {
                 "params": [
-                  "dsk.nvme0n1.read_op"
+                  "dsk.write_bytes"
                 ],
                 "type": "field"
               },
@@ -727,13 +754,43 @@
               },
               {
                 "params": [
-                  " / 100"
+                  "write_bytes"
                 ],
-                "type": "math"
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "dsk.read_op"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               },
               {
                 "params": [
                   "read_op"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "dsk.write_op"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              },
+              {
+                "params": [
+                  "write_op"
                 ],
                 "type": "alias"
               }
@@ -910,7 +967,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -925,6 +982,6 @@
   "timezone": "",
   "title": "System performance",
   "uid": "performance",
-  "version": 7,
+  "version": 1,
   "weekStart": ""
 }
