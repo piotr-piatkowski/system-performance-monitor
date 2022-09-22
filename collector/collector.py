@@ -11,6 +11,7 @@ logger = logging.getLogger("collector")
 
 def parse_data_line(label, values):
     data_row = {}
+    tags = {}
     if label == "CPU":
         tps = int(values[0])
         tick_keys = ('sys', 'user', 'nice', 'idle', 'wait', 'irq', 'softirq',
@@ -52,13 +53,14 @@ def parse_data_line(label, values):
             data_row[f"mem.{k}"] = v
     elif label == 'DSK':
         dsk_label = values.pop(0)
+        tags['disk'] = dsk_label
         keys = ('io_ms', 'read_op', 'read_sect', 'write_op', 'write_sect',
                 'discard_op', 'discard_sect')
         for k, v in zip(keys, values):
             v = int(v)
             data_row[f"dsk.{dsk_label}.{k}"] = v
 
-    return data_row
+    return data_row, tags
 
 def collect_data(args):
 
@@ -92,10 +94,10 @@ def collect_data(args):
                 # ignore initial values
                 continue
 
-            fields = parse_data_line(label, values)
+            fields, tags = parse_data_line(label, values)
             points.append({
                 'measurement': 'performance',
-                'tags': {},
+                'tags': tags,
                 'fields': fields,
             })
             logger.debug(f"{fields=}")

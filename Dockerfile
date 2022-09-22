@@ -72,10 +72,11 @@ COPY influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
 # Configure Grafana
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
+COPY grafana/provisioning /etc/grafana/provisioning/
 
 COPY collector/collector.py /usr/sbin/collector.py
 
-EXPOSE 3003
+EXPOSE 3000
 
 COPY run.sh /run.sh
 RUN ["chmod", "+x", "/run.sh"]
