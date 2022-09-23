@@ -692,7 +692,7 @@
       },
       "targets": [
         {
-          "alias": "$col",
+          "alias": "$tag_disk.$col",
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"

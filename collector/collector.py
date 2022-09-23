@@ -25,6 +25,7 @@ def parse_data_line(label, values):
             if k in tick_keys:
                 v = v / tps
             data_row[f"cpu.{k}"] = v
+        data_row['cpu.usage'] = 1.0 - data_row['cpu.idle'] / data_row['cpu.ncpu']
     elif label == "CPL":
         keys = ('ncpu', 'load1', 'load5', 'load15', 'ctxsw', 'hwirqs')
         for k, v in zip(keys, values):
@@ -53,6 +54,9 @@ def parse_data_line(label, values):
             else:
                 v *= page_size
             data_row[f"mem.{k}"] = v
+        free_mem = sum(data_row[f'mem.{k}'] for k in
+                       ('free', 'cache', 'buff', 'zfs_cache'))
+        data_row[f'mem.usage'] = 1.0 - free_mem / data_row['total']
     elif label == 'DSK':
         dsk_label = values.pop(0)
         tags['disk'] = dsk_label
@@ -63,6 +67,7 @@ def parse_data_line(label, values):
             data_row[f"dsk.{k}"] = v
         data_row[f"dsk.read_bytes"] = data_row["dsk.read_sect"] * SECTOR_SIZE
         data_row[f"dsk.write_bytes"] = data_row["dsk.write_sect"] * SECTOR_SIZE
+        data_row['dsk.usage'] = data_row['io_ms'] / 1000
 
     return data_row, tags
 
