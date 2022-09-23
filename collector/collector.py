@@ -56,7 +56,7 @@ def parse_data_line(label, values):
             data_row[f"mem.{k}"] = v
         free_mem = sum(data_row[f'mem.{k}'] for k in
                        ('free', 'cache', 'buff', 'zfs_cache'))
-        data_row[f'mem.usage'] = 1.0 - free_mem / data_row['total']
+        data_row[f'mem.usage'] = 1.0 - free_mem / data_row['mem.total']
     elif label == 'DSK':
         dsk_label = values.pop(0)
         tags['disk'] = dsk_label
@@ -67,7 +67,7 @@ def parse_data_line(label, values):
             data_row[f"dsk.{k}"] = v
         data_row[f"dsk.read_bytes"] = data_row["dsk.read_sect"] * SECTOR_SIZE
         data_row[f"dsk.write_bytes"] = data_row["dsk.write_sect"] * SECTOR_SIZE
-        data_row['dsk.usage'] = data_row['io_ms'] / 1000
+        data_row['dsk.usage'] = data_row['dsk.io_ms'] / 1000
 
     return data_row, tags
 
