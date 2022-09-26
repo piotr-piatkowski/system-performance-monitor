@@ -41,7 +41,7 @@ def parse_data_line(label, values):
                 'recl_slab', 'baloon', 'shared', 'res_shared', 'swapped',
                 'huge_page_size', *huge_page_keys, 'zfs_cache', 'ksm',
                 'ksm2')
-        non_free = 0
+        mem_sum = 0
         for k, v in zip(keys, values):
             v = int(v)
             if k == 'page_size':
@@ -55,10 +55,10 @@ def parse_data_line(label, values):
             else:
                 v *= page_size
             data_row[f"mem.{k}"] = v
-            if k not in ('total', 'free'):
-                non_free += v
+            if k != 'total':
+                mem_sum += v
         # Calculate memory used by all processes
-        data_row['mem.user'] = data_row['total'] - non_free
+        data_row['mem.user'] = data_row['mem.total'] - mem_sum
         free_mem = sum(data_row[f'mem.{k}'] for k in
                        ('free', 'cache', 'buff', 'zfs_cache'))
         data_row[f'mem.usage'] = 1.0 - free_mem / data_row['mem.total']

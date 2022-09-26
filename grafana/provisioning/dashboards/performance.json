@@ -606,24 +606,6 @@
             [
               {
                 "params": [
-                  "mem.free"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "free"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
                   "mem.user"
                 ],
                 "type": "field"
@@ -797,6 +779,24 @@
               {
                 "params": [
                   "zfs cache"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "mem.free"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              },
+              {
+                "params": [
+                  "free"
                 ],
                 "type": "alias"
               }
