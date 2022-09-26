@@ -76,6 +76,7 @@ def parse_data_line(label, values):
 
     return data_row, tags
 
+
 def collect_data(args):
 
     influx_conn = InfluxDBClient(args.influx_host, args.influx_port, '', '',
